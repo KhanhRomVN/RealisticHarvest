@@ -1,0 +1,8 @@
+{
+  "id": "realisticharvest:potassium_mix_fertilizer",
+  "fertility_boost": 0.15,
+  "organic_boost": 0.02,
+  "decay_rate": 0.0015,
+  "ph_shift": 0.0,
+  "notes": "Potassium blend. Balanced moderate fertility increase, slight organic matter, medium decay rate."
+}

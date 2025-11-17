@@ -1,0 +1,18 @@
+{
+  "crop": "minecraft:wheat",
+  "optimal": {
+    "moisture": { "min": 0.45, "max": 0.75 },
+    "ph": { "min": 6.0, "max": 7.0 },
+    "fertility": { "min": 0.5, "max": 0.9 }
+  },
+  "stress_penalty": {
+    "moisture": 0.4,
+    "ph": 0.3,
+    "fertility": 0.5
+  },
+  "growth_multiplier": 1.0,
+  "intensive_bonus": {
+    "aeration": { "threshold": 0.6, "bonus": 0.05 },
+    "organic_matter": { "threshold": 0.5, "bonus": 0.07 }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "realisticharvest:compost_fertilizer",
+  "fertility_boost": 0.05,
+  "organic_boost": 0.15,
+  "decay_rate": 0.0005,
+  "ph_shift": 0.0,
+  "notes": "Balanced organic compost. Slow decay, improves moisture retention indirectly via organic matter."
+}

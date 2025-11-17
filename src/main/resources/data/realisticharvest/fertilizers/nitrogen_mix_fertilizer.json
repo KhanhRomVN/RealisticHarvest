@@ -1,0 +1,8 @@
+{
+  "id": "realisticharvest:nitrogen_mix_fertilizer",
+  "fertility_boost": 0.3,
+  "organic_boost": 0.05,
+  "decay_rate": 0.0025,
+  "ph_shift": 0.05,
+  "notes": "High N mix. Big fertility spike, modest organic matter, fast decay. Slightly raises pH."
+}
