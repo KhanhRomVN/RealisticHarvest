@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.khanhromvn.realisticharvest.RealisticHarvest;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -83,11 +84,11 @@ public class FertilizerProfileLoader {
         LOGGER.info("[FertilizerProfileLoader] Loaded {} fertilizer profiles", loaded);
     }
 
-    @SubscribeEvent
-    public static void addReloadListener(AddReloadListenerEvent event) {
-        event.addListener(resourceManager -> {
-            LOGGER.info("[FertilizerProfileLoader] Resource reload triggered.");
-            reload(resourceManager);
-        });
-    }
+ @SubscribeEvent
+ public static void addReloadListener(AddReloadListenerEvent event) {
+ event.addListener((IResourceManagerReloadListener) (resourceManager) -> {
+ LOGGER.info("[FertilizerProfileLoader] Resource reload triggered.");
+ reload(resourceManager);
+ });
+ }
 }

@@ -2,6 +2,7 @@ package com.khanhromvn.realisticharvest;
 
 import com.khanhromvn.realisticharvest.soil.SoilAttribute;
 import com.khanhromvn.realisticharvest.soil.SoilData;
+import com.khanhromvn.realisticharvest.soil.SoilCapability;
 import com.khanhromvn.realisticharvest.config.RHConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -61,8 +62,9 @@ public class RealisticHarvest {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("[RealisticHarvest] Common setup - registering capabilities & systems");
-        event.enqueueWork(() ->
-            CapabilityManager.INSTANCE.register(SoilData.class, new net.minecraftforge.common.capabilities.Capability.IStorage<SoilData>() {
+        event.enqueueWork(() -> {
+            // Per-position soil data capability (if needed elsewhere)
+            CapabilityManager.INSTANCE.register(SoilData.class, new Capability.IStorage<SoilData>() {
                 @Override
                 public net.minecraft.nbt.INBT writeNBT(Capability<SoilData> capability, SoilData instance, net.minecraft.util.Direction side) {
                     return instance.serialize();
@@ -72,8 +74,23 @@ public class RealisticHarvest {
                 public void readNBT(Capability<SoilData> capability, SoilData instance, net.minecraft.util.Direction side, net.minecraft.nbt.INBT nbt) {
                     instance.deserialize(nbt);
                 }
-            }, SoilData::new)
-        );
+            }, SoilData::new);
+
+            // Chunk-level soil store capability used by SoilCapability
+            CapabilityManager.INSTANCE.register(SoilCapability.ChunkSoilStore.class, new Capability.IStorage<SoilCapability.ChunkSoilStore>() {
+                @Override
+                public net.minecraft.nbt.INBT writeNBT(Capability<SoilCapability.ChunkSoilStore> capability, SoilCapability.ChunkSoilStore instance, net.minecraft.util.Direction side) {
+                    return instance.serializeNBT();
+                }
+
+                @Override
+                public void readNBT(Capability<SoilCapability.ChunkSoilStore> capability, SoilCapability.ChunkSoilStore instance, net.minecraft.util.Direction side, net.minecraft.nbt.INBT nbt) {
+                    if (nbt instanceof net.minecraft.nbt.CompoundNBT) {
+                        instance.deserializeNBT((net.minecraft.nbt.CompoundNBT) nbt);
+                    }
+                }
+            }, SoilCapability.ChunkSoilStore::new);
+        });
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

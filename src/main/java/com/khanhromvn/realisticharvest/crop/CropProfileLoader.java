@@ -23,17 +23,17 @@ import java.util.Map;
  * data/realisticharvest/crops/*.json
  *
  * Cơ chế:
- *  - Đăng ký làm reload listener qua AddReloadListenerEvent.
- *  - Khi reload: quét tất cả resources có prefix folder "crops".
- *  - Parse JSON -> CropProfile -> cache vào MAP.
+ * - Đăng ký làm reload listener qua AddReloadListenerEvent.
+ * - Khi reload: quét tất cả resources có prefix folder "crops".
+ * - Parse JSON -> CropProfile -> cache vào MAP.
  *
  * Tích hợp sử dụng:
- *  CropProfileLoader.getProfile(new ResourceLocation("minecraft", "wheat"));
+ * CropProfileLoader.getProfile(new ResourceLocation("minecraft", "wheat"));
  *
  * TODO:
- *  - Validation chi tiết (range logic)
- *  - Log cảnh báo khi thiếu field
- *  - Thêm fertilizer profile loader tương tự
+ * - Validation chi tiết (range logic)
+ * - Log cảnh báo khi thiếu field
+ * - Thêm fertilizer profile loader tương tự
  */
 @Mod.EventBusSubscriber(modid = RealisticHarvest.MOD_ID)
 public class CropProfileLoader {
@@ -61,8 +61,10 @@ public class CropProfileLoader {
         int loaded = 0;
         for (ResourceLocation rl : resourceManager.listResources(folder, path -> path.endsWith(".json"))) {
             // Expect path: realisticharvest:crops/wheat.json
-            if (!"realisticharvest".equals(rl.getNamespace())) continue;
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceManager.getResource(rl).getInputStream(), StandardCharsets.UTF_8))) {
+            if (!"realisticharvest".equals(rl.getNamespace()))
+                continue;
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(resourceManager.getResource(rl).getInputStream(), StandardCharsets.UTF_8))) {
                 JsonObject root = GSON.fromJson(reader, JsonObject.class);
                 if (root == null) {
                     LOGGER.warn("[CropProfileLoader] Empty JSON: {}", rl);
@@ -90,9 +92,10 @@ public class CropProfileLoader {
 
     @SubscribeEvent
     public static void addReloadListener(AddReloadListenerEvent event) {
-        event.addListener(resourceManager -> {
-            LOGGER.info("[CropProfileLoader] Resource reload triggered.");
-            reload(resourceManager);
-        });
+        event.addListener(
+                (net.minecraftforge.resource.ISelectiveResourceReloadListener) (resourceManager, predicate) -> {
+                    LOGGER.info("[CropProfileLoader] Resource reload triggered.");
+                    reload(resourceManager);
+                });
     }
 }
